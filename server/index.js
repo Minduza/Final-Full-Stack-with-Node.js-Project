@@ -14,6 +14,29 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+//Login
+
+app.post('/login', async (req, res) => {
+  try {
+    const user = req.body;
+    const con = await client.connect();
+    const data = await con.db(dbName).collection('users').findOne(user);
+
+    let message = '';
+
+    if (data) {
+      message = 'Sekmingai prisijungėte';
+    } else {
+      message = 'Klaida. Blogas slaptažodis ar vartotojo vardas.';
+    }
+
+    await con.close();
+    res.send({ message });
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 // Get and Post Users
 
 app.get('/users', async (req, res) => {
