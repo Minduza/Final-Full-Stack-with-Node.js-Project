@@ -34,8 +34,8 @@ const Register = () => {
 
   return (
     <RegisterLayout>
-      <h1>Register</h1>
       <form className="registerForm" onSubmit={onSubmitHandler}>
+        <h1>Register</h1>
         <FormItem
           label="Name"
           type="text"
