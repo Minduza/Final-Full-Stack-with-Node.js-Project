@@ -32,11 +32,11 @@ const UserProvider = ({ children }) => {
           localStorage.setItem("user", JSON.stringify(response.data.userData));
           setMessage("Sveiki prisijungę");
           setUser(response.data.userData);
+          navigate(MAIN_ROUTE);
         } else {
           setMessage("Klaida. Bandykite dar karta");
         }
       })
-      .then(navigate(MAIN_ROUTE))
       .catch((error) => {
         console.error(error);
       });
