@@ -1,10 +1,14 @@
-import Register from "./pages/Register/Register";
+import Providers from "./context/Providers";
+import Login from "./pages/Login/Login";
+import NewPost from "./pages/NewPost/NewPost";
+import Routes from "./routes/Routes";
+// import Register from "./pages/Register/Register";
 
 const App = () => {
   return (
-    <div>
-      <Register />
-    </div>
+    <Providers>
+      <Routes />
+    </Providers>
   );
 };
 

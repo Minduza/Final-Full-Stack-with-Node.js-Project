@@ -1,0 +1,59 @@
+import { createContext, useState } from "react";
+import axios from "axios";
+import { MAIN_ROUTE } from "../routes/const";
+import { useNavigate } from "react-router-dom";
+
+const UserContext = createContext({
+  user: null,
+  isLoggedIn: false,
+  handleLogin: () => null,
+  handleLogout: () => null,
+  handleRegister: () => null,
+  handleUpdateUser: () => null,
+});
+
+const UserProvider = ({ children }) => {
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  let [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [message, setMessage] = useState("");
+  isLoggedIn = !!user;
+
+  const navigate = useNavigate();
+
+  const handleLogin = (userLogin) => {
+    axios
+      .post("http://localhost:3000/login", userLogin)
+      .then((response) => {
+        setIsLoggedIn(response.data.loggedIn);
+        console.log(response.data.loggedIn);
+        console.log(isLoggedIn);
+        console.log(response.data.userData);
+        if (response.data.loggedIn) {
+          localStorage.setItem("user", JSON.stringify(response.data.userData));
+          setMessage("Sveiki prisijungę");
+          setUser(response.data.userData);
+        } else {
+          setMessage("Klaida. Bandykite dar karta");
+        }
+      })
+      .then(navigate(MAIN_ROUTE))
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  return (
+    <UserContext.Provider
+      value={{
+        user,
+        isLoggedIn,
+        message,
+        handleLogin,
+      }}
+    >
+      {children}
+    </UserContext.Provider>
+  );
+};
+
+export { UserContext, UserProvider };

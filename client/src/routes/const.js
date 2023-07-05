@@ -1,14 +1,16 @@
 import Login from "../pages/Login/Login";
 import Main from "../pages/Main/Main";
-import Post from "../pages/Post/Post";
+import NewPost from "../pages/NewPost/NewPost";
 import Profile from "../pages/Profile/Profile";
 import Register from "../pages/Register/Register";
+import LoginLayout from "../layout/LoginLayout";
+import AuthenticatedLayout from "../layout/AuthenticatedLayout";
 
 export const LOGIN_ROUTE = "/login";
 export const REGISTER_ROUTE = "/register";
 export const MAIN_ROUTE = "/";
 export const PROFILE_ROUTE = "/profile";
-export const POST_ROUTE = "/post";
+export const POST_ROUTE = "/new_post";
 
 export const loginRoutes = {
   Layout: LoginLayout,
@@ -41,7 +43,7 @@ export const authenticatedRoutes = {
     },
     {
       path: POST_ROUTE,
-      Component: Post,
+      Component: NewPost,
     },
   ],
 };

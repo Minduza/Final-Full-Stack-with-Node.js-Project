@@ -1,29 +1,24 @@
-import React, { useState } from "react";
+import { useState, useContext } from "react";
 import RegisterLayout from "../../layout/RegisterLayout/RegisterLayout";
 import FormItem from "../../components/FormItem/FormItem";
 import "../Register/Register.scss";
 import Button from "../../components/Button/Button";
 import axios from "axios";
+import { UserContext } from "../../context/UserContext";
 
 const Login = () => {
+  const { handleLogin, message, isLoggedIn, user } = useContext(UserContext);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
 
-  const user = { email, password };
+  const userLogin = { email, password };
 
   const loginHandler = (e) => {
     e.preventDefault();
-
-    axios
-      .post("http://localhost:3000/login", user)
-      .then((response) => {
-        setMessage(response.data.message);
-        console.log(response.data.message);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    handleLogin(userLogin);
+    console.log(isLoggedIn);
+    console.log(user);
   };
 
   return (

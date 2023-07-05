@@ -22,16 +22,18 @@ app.post('/login', async (req, res) => {
     const con = await client.connect();
     const data = await con.db(dbName).collection('users').findOne(user);
 
-    let message = '';
+    let loggedIn = false;
+    let userData = null;
 
     if (data) {
-      message = 'Sekmingai prisijungėte';
+      loggedIn = true;
+      userData = data;
     } else {
-      message = 'Klaida. Blogas slaptažodis ar vartotojo vardas.';
+      loggedIn = false;
     }
 
     await con.close();
-    res.send({ message });
+    res.send({ loggedIn, userData });
   } catch (error) {
     res.status(500).send(error);
   }
@@ -90,13 +92,14 @@ app.get('/posts', async (req, res) => {
 
 app.post('/posts', async (req, res) => {
   try {
-    const { dateCreated, text, edited, userId } = req.body;
+    const { dateCreated, text, edited, userId, title } = req.body;
     const con = await client.connect();
     const data = await con
       .db(dbName)
       .collection('posts')
       .insertOne({
         dateCreated,
+        title,
         text,
         edited,
         usersId: new ObjectId(userId),
