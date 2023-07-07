@@ -130,8 +130,13 @@ app.post('/posts', async (req, res) => {
 // Get and Post Answers/Comments
 app.get('/posts/:id/answers', async (req, res) => {
   try {
+    const { id } = req.params;
     const con = await client.connect();
-    const data = await con.db(dbName).collection('comments').find().toArray();
+    const data = await con
+      .db(dbName)
+      .collection('comments')
+      .find({ postId: new ObjectId(id) })
+      .toArray();
     await con.close();
     res.send(data);
   } catch (error) {
