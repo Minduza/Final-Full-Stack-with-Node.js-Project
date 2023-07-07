@@ -4,6 +4,8 @@ import Button from "../../components/Button/Button";
 import axios from "axios";
 import RegisterLayout from "../../layout/RegisterLayout/RegisterLayout";
 import "./Register.scss";
+import { useNavigate } from "react-router-dom";
+import { LOGIN_ROUTE } from "../../routes/const";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -14,6 +16,7 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [repeatPsw, setRepeatPsw] = useState("");
 
+  const navigate = useNavigate();
   const onSubmitHandler = (e) => {
     e.preventDefault();
 
@@ -27,9 +30,12 @@ const Register = () => {
       repeatPsw,
     };
 
-    axios.post("http://localhost:3000/users", user).catch((error) => {
-      console.error(error);
-    });
+    axios
+      .post("http://localhost:3000/users", user)
+      .then(navigate(LOGIN_ROUTE))
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
