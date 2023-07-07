@@ -1,5 +1,6 @@
 import Login from "../pages/Login/Login";
 import Main from "../pages/Main/Main";
+import Post from "../pages/Post/Post";
 import NewPost from "../pages/NewPost/NewPost";
 import Profile from "../pages/Profile/Profile";
 import Register from "../pages/Register/Register";
@@ -10,7 +11,8 @@ export const LOGIN_ROUTE = "/login";
 export const REGISTER_ROUTE = "/register";
 export const MAIN_ROUTE = "/";
 export const PROFILE_ROUTE = "/profile";
-export const POST_ROUTE = "/new_post";
+export const NEW_POST_ROUTE = "/new_post";
+export const POST_ROUTE = "/posts/:postId";
 
 export const loginRoutes = {
   Layout: LoginLayout,
@@ -27,6 +29,10 @@ export const loginRoutes = {
       path: MAIN_ROUTE,
       Component: Main,
     },
+    {
+      path: POST_ROUTE,
+      Component: Post,
+    },
   ],
 };
 
@@ -42,8 +48,12 @@ export const authenticatedRoutes = {
       Component: Profile,
     },
     {
-      path: POST_ROUTE,
+      path: NEW_POST_ROUTE,
       Component: NewPost,
+    },
+    {
+      path: POST_ROUTE,
+      Component: Post,
     },
   ],
 };
