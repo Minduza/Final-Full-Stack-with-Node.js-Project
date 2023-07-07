@@ -1,13 +1,16 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import FormItem from "../../components/FormItem/FormItem";
 import RegisterLayout from "../../layout/RegisterLayout/RegisterLayout";
 import Button from "../../components/Button/Button";
 import axios from "axios";
 import { currentTime } from "../../utils/fullDate";
+import { UserContext } from "../../context/UserContext";
 
 const NewPost = () => {
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
+
+  const { user } = useContext(UserContext);
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
@@ -16,7 +19,8 @@ const NewPost = () => {
       title,
       text,
       dateCreated: currentTime(),
-      userId: "64a302007f6a59dd503bc69e",
+      userId: user._id,
+      nickname: user.nickname,
       edited: false,
     };
 
