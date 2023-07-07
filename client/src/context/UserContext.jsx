@@ -25,9 +25,7 @@ const UserProvider = ({ children }) => {
       .post("http://localhost:3000/login", userLogin)
       .then((response) => {
         setIsLoggedIn(response.data.loggedIn);
-        console.log(response.data.loggedIn);
-        console.log(isLoggedIn);
-        console.log(response.data.userData);
+
         if (response.data.loggedIn) {
           localStorage.setItem("user", JSON.stringify(response.data.userData));
           setMessage("Sveiki prisijungę");
