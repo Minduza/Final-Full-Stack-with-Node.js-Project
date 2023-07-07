@@ -90,9 +90,24 @@ app.get('/posts', async (req, res) => {
   }
 });
 
+app.get('/posts/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const con = await client.connect();
+    const data = await con
+      .db(dbName)
+      .collection('posts')
+      .findOne({ _id: new ObjectId(id) });
+    await con.close();
+    res.send(data);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 app.post('/posts', async (req, res) => {
   try {
-    const { dateCreated, text, edited, userId, title } = req.body;
+    const { dateCreated, text, edited, userId, title, nickname } = req.body;
     const con = await client.connect();
     const data = await con
       .db(dbName)
@@ -103,6 +118,7 @@ app.post('/posts', async (req, res) => {
         text,
         edited,
         usersId: new ObjectId(userId),
+        nickname,
       });
     await con.close();
     res.send(data);
@@ -112,7 +128,6 @@ app.post('/posts', async (req, res) => {
 });
 
 // Get and Post Answers/Comments
-
 app.get('/posts/:id/answers', async (req, res) => {
   try {
     const con = await client.connect();
@@ -127,7 +142,7 @@ app.get('/posts/:id/answers', async (req, res) => {
 app.post('/posts/:id/answers', async (req, res) => {
   try {
     const { id } = req.params;
-    const { dateCreated, text, edited, usersId } = req.body;
+    const { dateCreated, text, edited, userId } = req.body;
     const con = await client.connect();
     const data = await con
       .db(dbName)
@@ -136,7 +151,7 @@ app.post('/posts/:id/answers', async (req, res) => {
         dateCreated,
         text,
         edited,
-        usersId,
+        userId: new ObjectId(userId),
         postId: new ObjectId(id),
       });
     await con.close();
