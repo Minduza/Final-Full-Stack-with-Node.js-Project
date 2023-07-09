@@ -86,7 +86,7 @@ app.get('/posts', async (req, res) => {
     await con.close();
     res.send(data);
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).send(error.message);
   }
 });
 
@@ -97,7 +97,23 @@ app.get('/posts/:id', async (req, res) => {
     const data = await con
       .db(dbName)
       .collection('posts')
-      .findOne({ _id: new ObjectId(id) });
+      .aggregate([
+        {
+          $match: {
+            _id: new ObjectId(id),
+          },
+        },
+        {
+          $lookup: {
+            from: 'comments', // kitos kolekcijos pavadinimas
+            localField: '_id', // owners kolekcijos raktas per kurį susijungia
+            foreignField: 'postId', // kitos kolekcijos raktas per kurį susijungia
+            as: 'comments', // naujo rakto pavadinimas
+          },
+        },
+      ])
+      .toArray();
+
     await con.close();
     res.send(data);
   } catch (error) {
@@ -147,7 +163,7 @@ app.get('/posts/:id/answers', async (req, res) => {
 app.post('/posts/:id/answers', async (req, res) => {
   try {
     const { id } = req.params;
-    const { dateCreated, text, edited, userId } = req.body;
+    const { dateCreated, text, edited, userId, nickname } = req.body;
     const con = await client.connect();
     const data = await con
       .db(dbName)
@@ -156,9 +172,62 @@ app.post('/posts/:id/answers', async (req, res) => {
         dateCreated,
         text,
         edited,
+        nickname,
         userId: new ObjectId(userId),
         postId: new ObjectId(id),
       });
+    await con.close();
+    res.send(data);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+//Delete Question
+
+app.delete('/posts/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const con = await client.connect();
+    const data = await con
+      .db(dbName)
+      .collection('posts')
+      .deleteOne({ _id: new ObjectId(id) });
+    await con.close();
+    res.send(data);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+//Delete comment/answer
+
+app.delete('/answers/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const con = await client.connect();
+    const data = await con
+      .db(dbName)
+      .collection('comments')
+      .deleteOne({ _id: new ObjectId(id) });
+    await con.close();
+    res.send(data);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+//Update posts/questions
+
+app.patch('/posts/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, text, edited } = req.body;
+    const con = await client.connect();
+    const data = await con
+      .db(dbName)
+      .collection('posts')
+      .updateOne({ _id: new ObjectId(id) }, { $set: { title, text, edited } });
     await con.close();
     res.send(data);
   } catch (error) {
