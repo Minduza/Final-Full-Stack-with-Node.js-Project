@@ -5,12 +5,15 @@ import Button from "../../components/Button/Button";
 import axios from "axios";
 import { currentTime } from "../../utils/fullDate";
 import { UserContext } from "../../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 const NewPost = () => {
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
 
   const { user } = useContext(UserContext);
+
+  const navigate = useNavigate();
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
@@ -24,9 +27,14 @@ const NewPost = () => {
       edited: false,
     };
 
-    axios.post("http://localhost:3000/posts", post).catch((error) => {
-      console.error(error);
-    });
+    axios
+      .post("http://localhost:3000/posts", post)
+      .then(() => {
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
   return (
     <RegisterLayout>
