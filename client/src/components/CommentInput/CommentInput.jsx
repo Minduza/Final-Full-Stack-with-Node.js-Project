@@ -3,17 +3,20 @@ import axios from "axios";
 import { currentTime } from "../../utils/fullDate";
 
 import { UserContext } from "../../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
-const CommentInput = ({ postId }) => {
+const CommentInput = ({ postId, updatePost }) => {
   const [text, setText] = useState("");
 
   const { user } = useContext(UserContext);
+  const navigate = useNavigate();
 
   const comment = {
     dateCreated: currentTime(),
     edited: false,
     postId: postId,
-    userId: user._id,
+    nickname: (user && user.nickname) || "",
+    userId: (user && user._id) || "",
     text,
   };
 
@@ -21,6 +24,11 @@ const CommentInput = ({ postId }) => {
     e.preventDefault();
     axios
       .post(`http://localhost:3000/posts/${postId}/answers`, comment)
+
+      .then(() => {
+        updatePost(postId);
+      })
+
       .catch((error) => {
         console.error(error);
       });
