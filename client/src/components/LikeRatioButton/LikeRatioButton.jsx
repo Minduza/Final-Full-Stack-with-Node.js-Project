@@ -6,7 +6,6 @@ import "./LikeRatioButton.scss";
 
 const LikeRatioButton = ({ likeCounter, userLikes, commentId }) => {
   const [likeCount, setLikeCount] = useState(likeCounter);
-  //   const [disable, setDisable] = useState(false);
   const [btnLike, setBtnLike] = useState(false);
   const [btnDisike, setBtnDisike] = useState(false);
 

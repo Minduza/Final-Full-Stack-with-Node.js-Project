@@ -11,7 +11,6 @@ const CommentCard = ({
   text,
   edited,
   id,
-  postId,
 }) => {
   return (
     <div className={`${className} commentContainer`}>
@@ -21,7 +20,6 @@ const CommentCard = ({
         commentId={id}
       />
       <div>
-        {" "}
         <div className="commentHeader">
           <span>Commented by {nickname}</span>
           <span>

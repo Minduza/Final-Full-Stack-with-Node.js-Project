@@ -12,7 +12,6 @@ const Post = () => {
   const [post, setPost] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const { postId } = useParams();
-
   const [comments, setComments] = useState([]);
 
   const { user } = useContext(UserContext);
@@ -81,7 +80,7 @@ const Post = () => {
           />
         ) : (
           <div>
-            <h2>Norėdami komentuoti, prašome prisijungti.</h2>
+            <h2>Please login to comment.</h2>
           </div>
         )}
       </div>

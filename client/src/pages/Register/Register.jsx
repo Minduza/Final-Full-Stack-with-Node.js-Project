@@ -31,7 +31,7 @@ const Register = () => {
         console.error(error);
       });
   }, []);
-  console.log(users.find((user) => user.email === email));
+
   const onSubmitHandler = (e) => {
     e.preventDefault();
 
