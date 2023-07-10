@@ -4,13 +4,14 @@ import CommentInput from "../../components/CommentInput/CommentInput";
 import { getPost } from "../../api/posts";
 import axios from "axios";
 import { UserContext } from "../../context/UserContext";
-import CommentCard from "../../components/CommentCard/CommentCard";
+import MainLayout from "../../layout/MainLayout/MainLayout";
+import "../../components/PostCard/PostCard.scss";
+import Comments from "../../components/Comments/Comments";
 
 const Post = () => {
   const [post, setPost] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const { postId } = useParams();
-  const [showEdit, setShowEdit] = useState(false);
 
   const [comments, setComments] = useState([]);
 
@@ -19,11 +20,19 @@ const Post = () => {
   const updatePost = async () => {
     await axios
       .get(`http://localhost:3000/posts/${postId}`)
-
       .then((resp) => resp.data)
       .then((response) => {
         setPost(response[0]);
         setComments(response[0].comments);
+      });
+  };
+
+  const updateComment = async (id) => {
+    await axios
+      .get(`http://localhost:3000/posts/${id}/answers`)
+      .then((resp) => resp.data)
+      .then((response) => {
+        setComments(response);
       });
   };
 
@@ -52,49 +61,39 @@ const Post = () => {
     }
   };
 
+  console.log(post.usersId);
   return (
-    <div>
-      {isLoading ? (
-        <div>Loading</div>
-      ) : (
-        <>
-          <div>{post.title}</div>
-          <div>{post.text}</div>
-        </>
-      )}
-
-      {user ? (
-        <CommentInput postId={postId} updatePost={updatePost} />
-      ) : (
-        <div>
-          <h1>Norėdami komentuoti, prašome prisijungti.</h1>
-        </div>
-      )}
-
-      {/* <Comments postId={postId} /> */}
-
-      <div>
+    <MainLayout>
+      <div className="cardContainer">
         {isLoading ? (
           <div>Loading</div>
         ) : (
           <>
-            {comments.map((comment) => (
-              <div key={comment._id}>
-                <CommentCard
-                  nickname={comment.nickname}
-                  dateCreated={comment.dateCreated}
-                  text={comment.text}
-                />
-
-                {user && user._id !== null && user._id === comment.userId && (
-                  <div onClick={() => deleteComment(comment._id)}>X</div>
-                )}
-              </div>
-            ))}
+            <h2>{post.title}</h2>
+            <div>{post.text}</div>
           </>
         )}
+        {user ? (
+          <CommentInput
+            postId={postId}
+            updatePost={updatePost}
+            placeholder="Enter your answer here..."
+          />
+        ) : (
+          <div>
+            <h2>Norėdami komentuoti, prašome prisijungti.</h2>
+          </div>
+        )}
       </div>
-    </div>
+
+      <Comments
+        isLoading={isLoading}
+        comments={comments}
+        updateComment={updateComment}
+        deleteComment={deleteComment}
+        postId={postId}
+      />
+    </MainLayout>
   );
 };
 

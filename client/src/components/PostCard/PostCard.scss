@@ -4,8 +4,10 @@
     background-color: $primaryLight;
     padding: 1.5rem;
     border-radius: 7px;
-    width: 600px;
+    max-width: 600px;
+    width:100%;
     margin-bottom: 1rem;
+    overflow-wrap:break-word;
 }
 
 .postCardHeader {
@@ -23,5 +25,10 @@
     display: flex;
     gap:10px;
     align-items: center;
+    justify-content: space-between;
  
+}
+
+.postContent{
+    cursor: pointer;
 }

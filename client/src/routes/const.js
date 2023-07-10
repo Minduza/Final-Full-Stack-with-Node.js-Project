@@ -57,3 +57,10 @@ export const authenticatedRoutes = {
     },
   ],
 };
+
+export const navNoNAuthenticated = [
+  { title: "Login", path: LOGIN_ROUTE },
+  { title: "Register", path: REGISTER_ROUTE },
+  { title: "All Posts", path: MAIN_ROUTE },
+];
+export const navAuthenticated = [{ title: "All Posts", path: MAIN_ROUTE }];

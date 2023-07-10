@@ -1,22 +1,61 @@
 @import '../../styles/colors.scss';
 
-.btnReg {
-    margin-top: 1rem;
-    padding: 0.8rem 2.5rem;
-    font-size: 1.7rem;
-    width:100%;
+@mixin btn {
+
     background-color: $primaryMain ;
     color: $primaryLight;
     border: none;
     border-radius: 5px;
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     letter-spacing: 1px;
+    cursor: pointer;
+    &:hover {
+        background-color:$SecondaryMain
+    }
 
-    @media only screen and (min-width: 768px) {
-        width:250px;
-        cursor: pointer;
-        &:hover {
-            background-color:$SecondaryMain
-        }
-        }
+}
+
+.smBtn {
+    @include btn;
+    margin-top: 1rem;
+    padding: 0.2rem 0.4rem;
+    font-size: 1rem;
+    background-color: #ffffff;
+    border: 1px solid $primaryMain;
+    color: $primaryMain;
+
+    &:hover {
+        background-color: $primaryMain;
+        color:#ffffff;
+    }
+}
+
+
+
+.mdBtn {
+    @include btn;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    margin-top: 1rem;
+    padding: 0.7rem 2.3rem;
+    font-size: 0.9rem;
+    margin-right: 5px;
+}
+
+.lgBtn {
+    @include btn;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    margin-top: 1rem;
+    padding: 0.8rem 2.5rem;
+    font-size: 1.1rem;
+}
+
+.btnDelete {
+    @include btn;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    margin-top: 1rem;
+    padding: 0.7rem 2.3rem;
+    font-size: 0.9rem;
+    background-color: #F70B0E;
+    &:hover {
+        background-color: $lightOrange;
+    }
 }

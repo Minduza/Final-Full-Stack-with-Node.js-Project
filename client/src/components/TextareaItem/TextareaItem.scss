@@ -1,0 +1,16 @@
+@import '../../styles/colors.scss';
+
+.textareaInput{
+    resize: none;
+    width: 100%;
+    line-height: 1rem;
+    padding-top: 10px ;
+    padding-left: 10px;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+    font-size: 1rem;
+    border: 1px solid $primaryMain;
+    &:focus {
+        outline-color: $primaryMain;
+    }
+}

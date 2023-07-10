@@ -2,13 +2,16 @@
 
 .registerForm {
 
-    width: 90%;
+    max-width: 600px;
+    width:100%;
+    border-radius: 10px;
+    padding: 2.5rem;
+    background-color: $primaryLight;
+
+    h2{
+        text-align: center;
+        margin-top: 0;
+    }
 
 
-    @media only screen and (min-width: 768px) {
-        border-radius: 10px;
-        padding: 2.5rem;
-        background-color: $primaryLight;
-        max-width: 650px;
-        }
 }

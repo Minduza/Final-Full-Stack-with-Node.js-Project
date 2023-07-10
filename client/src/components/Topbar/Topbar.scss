@@ -1,0 +1,23 @@
+@import '../../styles/colors.scss';
+
+.navContainer  {
+    background-color: $primaryLight;
+    padding: 0.9rem;
+    border-radius: 30px;
+    max-width: 600px;
+    width:100%;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-around;
+    
+
+    a{
+        font-weight: 500;
+        text-transform: uppercase;
+        padding: 0.7rem;
+    }
+
+    a:hover {
+        color:$lightOrange;
+    }
+}

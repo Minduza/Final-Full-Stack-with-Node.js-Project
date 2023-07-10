@@ -1,15 +1,14 @@
 import { useContext, useState } from "react";
 import axios from "axios";
 import { currentTime } from "../../utils/fullDate";
-
 import { UserContext } from "../../context/UserContext";
-import { useNavigate } from "react-router-dom";
+import TextareaItem from "../TextareaItem/TextareaItem";
+import "./CommentInput.scss";
+import Button from "../Button/Button";
 
-const CommentInput = ({ postId, updatePost }) => {
+const CommentInput = ({ postId, updatePost, placeholder }) => {
   const [text, setText] = useState("");
-
   const { user } = useContext(UserContext);
-  const navigate = useNavigate();
 
   const comment = {
     dateCreated: currentTime(),
@@ -18,35 +17,36 @@ const CommentInput = ({ postId, updatePost }) => {
     nickname: (user && user.nickname) || "",
     userId: (user && user._id) || "",
     text,
+    likes: 0,
+    dislikes: 0,
   };
 
   const commentSubmitHandler = (e) => {
     e.preventDefault();
     axios
       .post(`http://localhost:3000/posts/${postId}/answers`, comment)
-
       .then(() => {
         updatePost(postId);
       })
-
+      .then(() => setText(""))
       .catch((error) => {
         console.error(error);
       });
   };
 
   return (
-    <form onSubmit={commentSubmitHandler}>
-      <textarea
-        name="comment"
-        id=""
-        cols="30"
+    <form onSubmit={commentSubmitHandler} className="inputContainer">
+      <TextareaItem
+        placeholder={placeholder}
         rows="10"
         value={text}
         onChange={(e) => {
           setText(e.target.value);
         }}
-      ></textarea>
-      <button type="submit">Comment</button>
+      ></TextareaItem>
+      <Button className="mdBtn" type="submit">
+        Comment
+      </Button>
     </form>
   );
 };

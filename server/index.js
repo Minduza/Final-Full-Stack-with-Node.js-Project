@@ -14,7 +14,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-//Login
+// Login
 
 app.post('/login', async (req, res) => {
   try {
@@ -68,6 +68,9 @@ app.post('/users', async (req, res) => {
 
 app.get('/posts', async (req, res) => {
   try {
+    const { sortDate } = req.query;
+    const sortDateType = sortDate === 'asc' ? 1 : -1;
+
     const con = await client.connect();
     const data = await con
       .db(dbName)
@@ -81,7 +84,14 @@ app.get('/posts', async (req, res) => {
             as: 'comments', // naujo rakto pavadinimas
           },
         },
+        {
+          $addFields: {
+            commentCount: { $size: '$comments' }, // Add a new field 'commentCount' to each post document
+          },
+        },
       ])
+      .sort({ dateCreated: sortDateType })
+
       .toArray();
     await con.close();
     res.send(data);
@@ -144,6 +154,23 @@ app.post('/posts', async (req, res) => {
 });
 
 // Get and Post Answers/Comments
+
+app.get('/answers/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const con = await client.connect();
+    const data = await con
+      .db(dbName)
+      .collection('comments')
+      .findOne({ _id: new ObjectId(id) });
+
+    await con.close();
+    res.send(data);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 app.get('/posts/:id/answers', async (req, res) => {
   try {
     const { id } = req.params;
@@ -163,7 +190,8 @@ app.get('/posts/:id/answers', async (req, res) => {
 app.post('/posts/:id/answers', async (req, res) => {
   try {
     const { id } = req.params;
-    const { dateCreated, text, edited, userId, nickname } = req.body;
+    const { dateCreated, text, edited, userId, nickname, likes, dislikes } =
+      req.body;
     const con = await client.connect();
     const data = await con
       .db(dbName)
@@ -175,6 +203,8 @@ app.post('/posts/:id/answers', async (req, res) => {
         nickname,
         userId: new ObjectId(userId),
         postId: new ObjectId(id),
+        likes,
+        dislikes,
       });
     await con.close();
     res.send(data);
@@ -183,7 +213,7 @@ app.post('/posts/:id/answers', async (req, res) => {
   }
 });
 
-//Delete Question
+// Delete Question
 
 app.delete('/posts/:id', async (req, res) => {
   try {
@@ -200,7 +230,7 @@ app.delete('/posts/:id', async (req, res) => {
   }
 });
 
-//Delete comment/answer
+// Delete comment/answer
 
 app.delete('/answers/:id', async (req, res) => {
   try {
@@ -217,17 +247,56 @@ app.delete('/answers/:id', async (req, res) => {
   }
 });
 
-//Update posts/questions
+// Update posts/questions
 
 app.patch('/posts/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, text, edited } = req.body;
+    const { title, text, edited, dateCreated } = req.body;
     const con = await client.connect();
     const data = await con
       .db(dbName)
       .collection('posts')
-      .updateOne({ _id: new ObjectId(id) }, { $set: { title, text, edited } });
+      .updateOne(
+        { _id: new ObjectId(id) },
+        { $set: { title, text, edited, dateCreated } },
+      );
+    await con.close();
+    res.send(data);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+// Update comment/answer
+
+app.patch('/answers/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { text, edited, dateCreated } = req.body;
+    const con = await client.connect();
+    const data = await con
+      .db(dbName)
+      .collection('comments')
+      .updateOne(
+        { _id: new ObjectId(id) },
+        { $set: { text, edited, dateCreated } },
+      );
+    await con.close();
+    res.send(data);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+app.patch('/answers/:id/likes', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { likes, dislikes } = req.body;
+    const con = await client.connect();
+    const data = await con
+      .db(dbName)
+      .collection('comments')
+      .updateOne({ _id: new ObjectId(id) }, { $set: { likes, dislikes } });
     await con.close();
     res.send(data);
   } catch (error) {

@@ -5,7 +5,7 @@ const FormItem = ({ label, type, className, onChange, value, ...props }) => {
   return (
     <div>
       <div className="labelItem">
-        <label>{label}:</label>
+        <label>{label}</label>
       </div>
       <Input
         type={type}

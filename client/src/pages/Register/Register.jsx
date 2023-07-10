@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import FormItem from "../../components/FormItem/FormItem";
 import Button from "../../components/Button/Button";
 import axios from "axios";
-import RegisterLayout from "../../layout/RegisterLayout/RegisterLayout";
+import MainLayout from "../../layout/MainLayout/MainLayout";
 import "./Register.scss";
 import { useNavigate } from "react-router-dom";
 import { LOGIN_ROUTE } from "../../routes/const";
@@ -39,7 +39,7 @@ const Register = () => {
   };
 
   return (
-    <RegisterLayout>
+    <MainLayout>
       <form className="registerForm" onSubmit={onSubmitHandler}>
         <h1>Register</h1>
         <FormItem
@@ -106,9 +106,9 @@ const Register = () => {
           }}
           required
         />
-        <Button className="btnReg">REGISTER</Button>
+        <Button className="lgBtn">REGISTER</Button>
       </form>
-    </RegisterLayout>
+    </MainLayout>
   );
 };
 

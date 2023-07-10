@@ -1,19 +1,23 @@
 import { useEffect, useState } from "react";
 import PostCard from "../../components/PostCard/PostCard";
-import RegisterLayout from "../../layout/RegisterLayout/RegisterLayout";
+import MainLayout from "../../layout/MainLayout/MainLayout";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Sort from "../../components/Sort/Sort";
 
 const Main = () => {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [sortDate, setSortDate] = useState("");
+  const [filterComments, setFiltetComments] = useState(false);
+  const [sortByAmountAsc, setSortByAscAmountAsc] = useState(false);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     setIsLoading(true);
     axios
-      .get("http://localhost:3000/posts")
+      .get(`http://localhost:3000/posts?sortDate=${sortDate}`)
       .then((resp) => resp.data)
       .then((response) => {
         setPosts(response);
@@ -24,16 +28,27 @@ const Main = () => {
       .finally(() => {
         setIsLoading(false);
       });
-  }, []);
+  }, [sortDate]);
 
   const onclickHandler = (id) => navigate(`/posts/${id}`);
 
+  const notAnsweredPosts = posts.filter((post) => post.comments.length === 0);
+  const sortedPosts = filterComments ? notAnsweredPosts : posts;
+  if (sortByAmountAsc) {
+    sortedPosts.sort((a, b) => b.comments.length - a.comments.length);
+  }
+
   return (
-    <RegisterLayout>
+    <MainLayout>
+      <Sort
+        setSortDate={setSortDate}
+        setFiltetComments={setFiltetComments}
+        setSortByAscAmountAsc={setSortByAscAmountAsc}
+      />
       {isLoading ? (
         <div>Loading</div>
       ) : (
-        posts.map((post, index) => (
+        sortedPosts.map((post, index) => (
           <PostCard
             key={index}
             onClick={() => onclickHandler(post._id)}
@@ -48,7 +63,7 @@ const Main = () => {
           />
         ))
       )}
-    </RegisterLayout>
+    </MainLayout>
   );
 };
 export default Main;

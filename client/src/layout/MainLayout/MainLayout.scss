@@ -1,0 +1,26 @@
+
+.contentBg {
+    background-image: url('../../assets/registerBg.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    width: 100%;
+    height:100vh;
+    position: absolute;
+    z-index: -999;
+  
+}
+
+.content{
+    
+    height:100vh;
+    overflow-y:scroll ;
+    display: flex;
+    padding-top: 3rem;
+    align-items: center;
+    flex-direction: column;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: #000000 #ffffff;
+  
+}

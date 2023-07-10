@@ -1,9 +1,8 @@
 import { useState, useContext } from "react";
-import RegisterLayout from "../../layout/RegisterLayout/RegisterLayout";
+import MainLayout from "../../layout/MainLayout/MainLayout";
 import FormItem from "../../components/FormItem/FormItem";
 import "../Register/Register.scss";
 import Button from "../../components/Button/Button";
-import axios from "axios";
 import { UserContext } from "../../context/UserContext";
 
 const Login = () => {
@@ -22,7 +21,7 @@ const Login = () => {
   };
 
   return (
-    <RegisterLayout>
+    <MainLayout>
       <form className="registerForm" onSubmit={loginHandler}>
         <h1>Login</h1>
         <h2>{message}</h2>
@@ -44,9 +43,9 @@ const Login = () => {
           }}
           required
         />
-        <Button className="btnReg">Login</Button>
+        <Button className="lgBtn">Login</Button>
       </form>
-    </RegisterLayout>
+    </MainLayout>
   );
 };
 
