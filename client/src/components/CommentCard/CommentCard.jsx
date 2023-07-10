@@ -19,7 +19,7 @@ const CommentCard = ({
         userLikes={userLikes}
         commentId={id}
       />
-      <div>
+      <div className="containerText">
         <div className="commentHeader">
           <span>Commented by {nickname}</span>
           <span>
