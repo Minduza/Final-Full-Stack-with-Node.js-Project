@@ -190,8 +190,15 @@ app.get('/posts/:id/answers', async (req, res) => {
 app.post('/posts/:id/answers', async (req, res) => {
   try {
     const { id } = req.params;
-    const { dateCreated, text, edited, userId, nickname, likes, dislikes } =
-      req.body;
+    const {
+      dateCreated,
+      text,
+      edited,
+      userId,
+      nickname,
+      likeCounter,
+      userLikes,
+    } = req.body;
     const con = await client.connect();
     const data = await con
       .db(dbName)
@@ -203,8 +210,8 @@ app.post('/posts/:id/answers', async (req, res) => {
         nickname,
         userId: new ObjectId(userId),
         postId: new ObjectId(id),
-        likes,
-        dislikes,
+        likeCounter,
+        userLikes,
       });
     await con.close();
     res.send(data);
@@ -291,12 +298,15 @@ app.patch('/answers/:id', async (req, res) => {
 app.patch('/answers/:id/likes', async (req, res) => {
   try {
     const { id } = req.params;
-    const { likes, dislikes } = req.body;
+    const { likeCounter, userLikes } = req.body;
     const con = await client.connect();
     const data = await con
       .db(dbName)
       .collection('comments')
-      .updateOne({ _id: new ObjectId(id) }, { $set: { likes, dislikes } });
+      .updateOne(
+        { _id: new ObjectId(id) },
+        { $set: { likeCounter, userLikes } },
+      );
     await con.close();
     res.send(data);
   } catch (error) {

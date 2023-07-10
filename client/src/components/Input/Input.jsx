@@ -1,6 +1,13 @@
 import "./Input.scss";
 
-const Input = ({ type, className, onChange, value, ...props }) => {
+const Input = ({
+  type,
+  className,
+  onChange,
+  value,
+
+  ...props
+}) => {
   return (
     <input
       type={type}

@@ -1,7 +1,15 @@
 import Input from "../Input/Input";
 import "./FormItem.scss";
 
-const FormItem = ({ label, type, className, onChange, value, ...props }) => {
+const FormItem = ({
+  label,
+  type,
+  className,
+  onChange,
+  value,
+
+  ...props
+}) => {
   return (
     <div>
       <div className="labelItem">

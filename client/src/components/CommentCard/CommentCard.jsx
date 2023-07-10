@@ -1,12 +1,12 @@
 import React from "react";
 import "./CommentCard.scss";
-import LikeDislikeComponent from "../LikeRatio/LikeRatio";
+import LikeRatioButton from "../LikeRatioButton/LikeRatioButton";
 
 const CommentCard = ({
   className,
   nickname,
-  likes,
-  dislikes,
+  likeCounter,
+  userLikes,
   dateCreated,
   text,
   edited,
@@ -14,21 +14,23 @@ const CommentCard = ({
   postId,
 }) => {
   return (
-    <div className={className}>
-      <LikeDislikeComponent
-        likes={likes}
-        dislikes={dislikes}
+    <div className={`${className} commentContainer`}>
+      <LikeRatioButton
+        likeCounter={likeCounter}
+        userLikes={userLikes}
         commentId={id}
-        postId={postId}
       />
-      <div className="commentHeader">
-        <span>Commented by {nickname}</span>
-        <span>
-          {edited ? "Date Edited: " : "Date created: "}
-          {dateCreated}
-        </span>
+      <div>
+        {" "}
+        <div className="commentHeader">
+          <span>Commented by {nickname}</span>
+          <span>
+            {edited ? "Date Edited: " : "Date created: "}
+            {dateCreated}
+          </span>
+        </div>
+        <div className="commentBody">{text}</div>
       </div>
-      <div className="commentBody">{text}</div>
     </div>
   );
 };

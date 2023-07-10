@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FormItem from "../../components/FormItem/FormItem";
 import Button from "../../components/Button/Button";
 import axios from "axios";
@@ -15,8 +15,23 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPsw, setRepeatPsw] = useState("");
+  const [message, setMessage] = useState("");
+  const [users, setUsers] = useState([]);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/users")
+      .then((resp) => resp.data)
+      .then((response) => {
+        setUsers(response);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+  console.log(users.find((user) => user.email === email));
   const onSubmitHandler = (e) => {
     e.preventDefault();
 
@@ -27,21 +42,35 @@ const Register = () => {
       birthDate,
       email,
       password,
-      repeatPsw,
     };
 
-    axios
-      .post("http://localhost:3000/users", user)
-      .then(navigate(LOGIN_ROUTE))
-      .catch((error) => {
-        console.error(error);
-      });
+    // Validation
+    if (
+      password === repeatPsw &&
+      !users.find((user) => user.email === email) &&
+      !users.find((user) => user.nickname === nickname)
+    ) {
+      setMessage("");
+      axios
+        .post("http://localhost:3000/users", user)
+        .then(navigate(LOGIN_ROUTE))
+        .catch((error) => {
+          console.error(error);
+        });
+    } else if (password !== repeatPsw) {
+      setMessage("Passwords don't match");
+    } else if (users.find((user) => user.email === email)) {
+      setMessage("This email already exists");
+    } else if (users.find((user) => user.nickname === nickname)) {
+      setMessage("This nickname is already taken");
+    }
   };
 
   return (
     <MainLayout>
       <form className="registerForm" onSubmit={onSubmitHandler}>
         <h1>Register</h1>
+        <span className="redMessage">{message}</span>
         <FormItem
           label="Name"
           type="text"
@@ -61,6 +90,8 @@ const Register = () => {
           required
         />
         <FormItem
+          minlength="2"
+          maxlength="15"
           label="Nickname"
           type="text"
           value={nickname}
@@ -71,7 +102,7 @@ const Register = () => {
         />
         <FormItem
           label="Birth date"
-          type="text"
+          type="date"
           value={birthDate}
           onChange={(e) => {
             setBirthDate(e.target.value);
@@ -89,6 +120,7 @@ const Register = () => {
         />
 
         <FormItem
+          minlength="6"
           label="Password"
           type="password"
           value={password}
@@ -98,6 +130,7 @@ const Register = () => {
           required
         />
         <FormItem
+          minlength="6"
           label="Repeat Password"
           type="password"
           value={repeatPsw}

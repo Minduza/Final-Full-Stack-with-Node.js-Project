@@ -17,8 +17,8 @@ const CommentInput = ({ postId, updatePost, placeholder }) => {
     nickname: (user && user.nickname) || "",
     userId: (user && user._id) || "",
     text,
-    likes: 0,
-    dislikes: 0,
+    userLikes: [],
+    likeCounter: 0,
   };
 
   const commentSubmitHandler = (e) => {

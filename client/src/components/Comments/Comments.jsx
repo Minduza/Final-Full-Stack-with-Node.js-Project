@@ -49,8 +49,8 @@ const Comments = ({
               dateCreated={comment.dateCreated}
               text={comment.text}
               edited={comment.edited}
-              likes={comment.likes}
-              dislikes={comment.dislikes}
+              likeCounter={comment.likeCounter}
+              userLikes={comment.userLikes}
             />
 
             {user && user._id !== null && user._id === comment.userId && (
