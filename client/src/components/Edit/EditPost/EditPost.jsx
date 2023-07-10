@@ -52,7 +52,7 @@ const EditPost = ({ postId, title, text, showEdit, setShowEdit }) => {
             onChange={(e) => setEditedTitle(e.target.value)}
           />
           <TextareaItem
-            rows="5"
+            rows="10"
             cols="50"
             type="text"
             required
