@@ -11,13 +11,17 @@ const LikeRatioButton = ({ likeCounter, userLikes, commentId }) => {
 
   const { user } = useContext(UserContext);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (!user) {
+      setBtnDisike(true);
+      setBtnLike(true);
+    }
+  }, [user]);
 
   const increase = () => {
     const newCount = likeCount + 1;
     setLikeCount(newCount);
     likeSubmit(newCount);
-
     setBtnDisike(false);
     setBtnLike(true);
   };
